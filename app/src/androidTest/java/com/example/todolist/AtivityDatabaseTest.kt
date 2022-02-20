@@ -5,6 +5,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
+import com.example.todolist.data.db.ActivityDao
+import com.example.todolist.data.db.entities.ActivityDatabase
+import com.example.todolist.data.db.entities.Activity
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -35,7 +38,7 @@ class AtivityDatabaseTest {
         val activity = Activity("activity1", "true", 1)
         activityDao.insertActivity(activity)
         val allActivities = activityDao.getAllActivities()
-        assertThat(activity in allActivities).isTrue()
+        assertThat(activity in allActivities.value!!).isTrue()
     }
 
     @Test
@@ -44,7 +47,7 @@ class AtivityDatabaseTest {
         activityDao.insertActivity(activity)
         activityDao.deleteActivity(activity.id!!)
         val allActivities = activityDao.getAllActivities()
-        assertThat(allActivities.contains(activity)).isFalse()
+        assertThat(allActivities.value!!.contains(activity)).isFalse()
     }
 
     @Test
@@ -53,7 +56,7 @@ class AtivityDatabaseTest {
         activityDao.insertActivity(activity)
         activityDao.isCheckedChange("false", activity.id!!)
         val allActivities = activityDao.getAllActivities()
-        assertThat(allActivities[0].isDone == "false").isTrue()
+        assertThat(allActivities.value!![0].isDone == "false").isTrue()
     }
 
     @Test

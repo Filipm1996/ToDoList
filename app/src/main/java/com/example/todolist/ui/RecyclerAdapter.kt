@@ -1,4 +1,4 @@
-package com.example.todolist
+package com.example.todolist.ui
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,8 @@ import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todolist.R
+import com.example.todolist.data.db.entities.Activity
 
 
 class RecyclerAdapter(
@@ -15,7 +17,7 @@ class RecyclerAdapter(
     var array : List<Activity>? = null
     var onClickDeleteItem :((Activity)->Unit)? = null
     var onIsCheckedItem : ((Activity)->Unit)? = null
-    class ViewHolder (var view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
         var textView: TextView = view.findViewById(R.id.text)
         var deleteButton : ImageButton = view.findViewById(R.id.deleteButton)
         var checkBox : CheckBox = view.findViewById(R.id.isChecked)
@@ -49,8 +51,10 @@ class RecyclerAdapter(
         return array!!.size
     }
 
+
     @SuppressLint("NotifyDataSetChanged")
     fun addItem (items: List<Activity>) {
         this.array = items
+        notifyDataSetChanged()
     }
 }
