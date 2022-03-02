@@ -4,11 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import com.example.todolist.data.db.entities.Activity
 import com.example.todolist.data.db.entities.ActivityDatabase
-import com.example.todolist.data.repositoriesde.deafultRepository
 
-class toDoRepository (
+class ToDoRepository (
     mContext:Context
-        ) : deafultRepository {
+        ) : DeafultRepository {
     private val db = Room.databaseBuilder(mContext, ActivityDatabase::class.java, "activity_database").build()
 
     override suspend fun insertActivity(activity: Activity) = db.activityDao().insertActivity(activity)

@@ -11,12 +11,10 @@ import com.example.todolist.R
 import com.example.todolist.data.db.entities.Activity
 
 
-class RecyclerAdapter(
-
-) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (){
-    var array : List<Activity>? = null
-    var onClickDeleteItem :((Activity)->Unit)? = null
-    var onIsCheckedItem : ((Activity)->Unit)? = null
+class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (){
+    private var array : List<Activity>? = null
+    private var onClickDeleteItem :((Activity)->Unit)? = null
+    private var onIsCheckedItem : ((Activity)->Unit)? = null
     class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
         var textView: TextView = view.findViewById(R.id.text)
         var deleteButton : ImageButton = view.findViewById(R.id.deleteButton)

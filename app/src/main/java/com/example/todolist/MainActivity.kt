@@ -7,23 +7,22 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.databinding.ActivityMainBinding
 import com.example.todolist.data.db.entities.Activity
-import com.example.todolist.data.repositories.toDoRepository
+import com.example.todolist.data.repositories.ToDoRepository
 import com.example.todolist.ui.RecyclerAdapter
-import com.example.todolist.ui.toDoViewModel
-import com.example.todolist.ui.toDoViewModelFactory
+import com.example.todolist.ui.ToDoViewModel
+import com.example.todolist.ui.ToDoViewModelFactory
 import kotlinx.coroutines.*
 
 private lateinit var binding: ActivityMainBinding
 @DelicateCoroutinesApi
 @RequiresApi(Build.VERSION_CODES.P)
 class MainActivity: AppCompatActivity() {
-    private lateinit var viewModel : toDoViewModel
+    private lateinit var viewModel : ToDoViewModel
 
     private  var recyclerAdapter : RecyclerAdapter? = null
 
@@ -33,17 +32,17 @@ class MainActivity: AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         recyclerAdapter = RecyclerAdapter()
-        val factory = toDoViewModelFactory(toDoRepository(this))
-        viewModel = ViewModelProvider(this, factory).get(toDoViewModel::class.java)
+        val factory = ToDoViewModelFactory(ToDoRepository(this))
+        viewModel = ViewModelProvider(this, factory)[ToDoViewModel::class.java]
         setOnClickListeners()
-            val recyclerView = findViewById<RecyclerView>(R.id.listView)
-            viewModel.getAllActivities().observe(this, Observer {
+            val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+            viewModel.getAllActivities().observe(this) {
                 val listOfAcivities = it
                 recyclerView.layoutManager = LinearLayoutManager(applicationContext)
                 recyclerAdapter?.addItem(listOfAcivities)
                 recyclerView.adapter = recyclerAdapter
 
-            })
+            }
 
     }
 
@@ -56,7 +55,7 @@ class MainActivity: AppCompatActivity() {
             val text: String = binding.editText.text.toString()
             if (text != "") {
                 viewModel.insertActivity(Activity(description = text))
-                binding.editText.getText()!!.clear()
+                binding.editText.text!!.clear()
             }
             else{Toast.makeText(this,"Please write activity", Toast.LENGTH_LONG).show()}
         }
@@ -68,7 +67,7 @@ class MainActivity: AppCompatActivity() {
 
     private fun isCheckedChange(done: String, id: Int) {
         val isChecked : Boolean = done.toBoolean()
-        if (isChecked == true){
+        if (isChecked){
             viewModel.isCheckedChange(false.toString(), id)
         } else{
             viewModel.isCheckedChange(true.toString(), id)

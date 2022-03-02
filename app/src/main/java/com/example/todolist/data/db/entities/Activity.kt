@@ -2,7 +2,6 @@ package com.example.todolist.data.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlin.random.Random
 
 @Entity(tableName = "list_of_activities")
 data class Activity(

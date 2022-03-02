@@ -1,10 +1,9 @@
-package com.example.todolist.data.repositoriesde
+package com.example.todolist.data.repositories
 
 import androidx.lifecycle.LiveData
 import com.example.todolist.data.db.entities.Activity
-import com.example.todolist.data.db.entities.ActivityDatabase
 
-interface deafultRepository {
+interface DeafultRepository {
     suspend fun insertActivity(activity: Activity)
 
     fun deleteActivity (id : Int)

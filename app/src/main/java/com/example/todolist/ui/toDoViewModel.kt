@@ -1,14 +1,14 @@
 package com.example.todolist.ui
 
-import android.app.Activity
+
 import androidx.lifecycle.ViewModel
-import com.example.todolist.data.repositories.toDoRepository
+import com.example.todolist.data.repositories.ToDoRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class toDoViewModel(
-    private val repository : toDoRepository
+class ToDoViewModel(
+    private val repository : ToDoRepository
 ) : ViewModel() {
 
     fun insertActivity(activity: com.example.todolist.data.db.entities.Activity) = CoroutineScope(Dispatchers.IO).launch {
@@ -21,5 +21,4 @@ class toDoViewModel(
 
     fun isCheckedChange(done: String, id : Int) = CoroutineScope(Dispatchers.IO).launch { repository.isCheckedChange(done, id)}
 
-    fun getDataCount() = repository.getDataCount()
 }
