@@ -1,24 +1,28 @@
 package com.example.todolist.ui
 
 
+
+import android.util.Log
+import com.example.todolist.data.db.entities.Activity
 import androidx.lifecycle.ViewModel
 import com.example.todolist.data.repositories.ToDoRepository
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ToDoViewModel(
     private val repository : ToDoRepository
 ) : ViewModel() {
 
-    fun insertActivity(activity: com.example.todolist.data.db.entities.Activity) = CoroutineScope(Dispatchers.IO).launch {
-        repository.insertActivity(activity)
-    }
 
-    fun deleteActivity(id : Int) = CoroutineScope(Dispatchers.IO).launch{repository.deleteActivity(id)}
+    fun saveActivityToFirebase(activity : Activity)  = repository.saveActivityToFirebase(activity)
 
-    fun getAllActivities() = repository.getAllActivities()
+    fun deleteActivityFromFirebase(description: String) = repository.deleteActivityFromFirebase(description)
 
-    fun isCheckedChange(done: String, id : Int) = CoroutineScope(Dispatchers.IO).launch { repository.isCheckedChange(done, id)}
+    fun getAllActivitiesFromFirebase() = repository.getAllActivitiesFromFirebase()
+
+    fun isCheckedChangeInFirebase(done: String, description: String) = repository.isCheckedChangeInFirebase(done,description)
 
 }

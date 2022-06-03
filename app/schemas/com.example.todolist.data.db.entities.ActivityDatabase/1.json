@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b05e22729756a51d7a2eceb4b0d40036",
+    "identityHash": "426e49d93a3f939055f49a2ac6613a32",
     "entities": [
       {
-        "tableName": "list_of_activities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`description` TEXT NOT NULL, `isDone` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT)",
+        "tableName": "Activity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`description` TEXT NOT NULL, `isDone` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "description",
@@ -19,19 +19,11 @@
             "columnName": "isDone",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
           }
         ],
         "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
+          "columnNames": [],
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -40,7 +32,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b05e22729756a51d7a2eceb4b0d40036')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '426e49d93a3f939055f49a2ac6613a32')"
     ]
   }
 }

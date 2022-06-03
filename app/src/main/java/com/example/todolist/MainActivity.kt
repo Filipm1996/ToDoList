@@ -16,6 +16,9 @@ import com.example.todolist.data.repositories.ToDoRepository
 import com.example.todolist.ui.RecyclerAdapter
 import com.example.todolist.ui.ToDoViewModel
 import com.example.todolist.ui.ToDoViewModelFactory
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 
 private lateinit var binding: ActivityMainBinding
@@ -23,7 +26,6 @@ private lateinit var binding: ActivityMainBinding
 @RequiresApi(Build.VERSION_CODES.P)
 class MainActivity: AppCompatActivity() {
     private lateinit var viewModel : ToDoViewModel
-
     private  var recyclerAdapter : RecyclerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,54 +34,53 @@ class MainActivity: AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         recyclerAdapter = RecyclerAdapter()
-        val factory = ToDoViewModelFactory(ToDoRepository(this))
-        viewModel = ViewModelProvider(this, factory)[ToDoViewModel::class.java]
+        viewModel = ViewModelProvider(this,ToDoViewModelFactory(ToDoRepository()) )[ToDoViewModel::class.java]
         setOnClickListeners()
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-            viewModel.getAllActivities().observe(this) {
-                val listOfAcivities = it
+            viewModel.getAllActivitiesFromFirebase()
+            viewModel.getAllActivitiesFromFirebase().observe(this){list ->
                 recyclerView.layoutManager = LinearLayoutManager(applicationContext)
-                recyclerAdapter?.addItem(listOfAcivities)
+                recyclerAdapter?.addItem(list)
                 recyclerView.adapter = recyclerAdapter
-
             }
 
     }
 
     private fun setOnClickListeners() {
         recyclerAdapter!!.setOnClickDeleteItem {
-                deleteActivity(it.id!!)
+                deleteActivity(it.description)
+                recyclerAdapter!!.notifyDataSetChanged()
         }
 
         binding.confirmButton.setOnClickListener {
             val text: String = binding.editText.text.toString()
             if (text != "") {
-                viewModel.insertActivity(Activity(description = text))
+                viewModel.saveActivityToFirebase(Activity(description = text))
                 binding.editText.text!!.clear()
             }
             else{Toast.makeText(this,"Please write activity", Toast.LENGTH_LONG).show()}
         }
         recyclerAdapter!!.setOnIsCheckedItem {
-                isCheckedChange(it.isDone, it.id!!)
+                isCheckedChange(it.done, it.description)
         }
 
     }
 
-    private fun isCheckedChange(done: String, id: Int) {
+    private fun isCheckedChange(done: String, description: String) {
         val isChecked : Boolean = done.toBoolean()
         if (isChecked){
-            viewModel.isCheckedChange(false.toString(), id)
+            viewModel.isCheckedChangeInFirebase(false.toString(),description)
         } else{
-            viewModel.isCheckedChange(true.toString(), id)
+            viewModel.isCheckedChangeInFirebase(true.toString(), description)
         }
     }
 
-   private fun deleteActivity(id: Int) {
+   fun deleteActivity(description :String) {
            val buildier = AlertDialog.Builder(this)
            buildier.setMessage("Do you want to delete activity?")
            buildier.setCancelable(true)
            buildier.setPositiveButton("Yes") { dialog, _ ->
-                   viewModel.deleteActivity(id)
+                   viewModel.deleteActivityFromFirebase(description)
                    dialog.dismiss()
            }
            buildier.setNegativeButton("No") { dialog, _ ->

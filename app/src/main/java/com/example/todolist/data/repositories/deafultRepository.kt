@@ -1,16 +1,17 @@
 package com.example.todolist.data.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.todolist.data.db.entities.Activity
 
 interface DeafultRepository {
-    suspend fun insertActivity(activity: Activity)
 
-    fun deleteActivity (id : Int)
+    fun saveActivityToFirebase (activity: Activity)
 
-    fun getAllActivities() : LiveData<List<Activity>>
+    fun deleteActivityFromFirebase (description: String)
 
-    fun isCheckedChange(done : String, id : Int)
+    fun getAllActivitiesFromFirebase() : MutableLiveData<MutableList<Activity>>
 
-    fun getDataCount() : Int
+    fun isCheckedChangeInFirebase(done: String, description: String)
+
 }

@@ -40,7 +40,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val activity = array!![position]
         holder.textView.text = activity.description
-        holder.checkBox.isChecked = activity.isDone.toBoolean()
+        holder.checkBox.isChecked = activity.done.toBoolean()
         holder.deleteButton.setOnClickListener{ onClickDeleteItem?.invoke(activity) }
         holder.checkBox.setOnClickListener { onIsCheckedItem?.invoke(activity)}
     }
