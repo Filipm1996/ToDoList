@@ -19,8 +19,6 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (){
         var textView: TextView = view.findViewById(R.id.text)
         var deleteButton : ImageButton = view.findViewById(R.id.deleteButton)
         var checkBox : CheckBox = view.findViewById(R.id.isChecked)
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

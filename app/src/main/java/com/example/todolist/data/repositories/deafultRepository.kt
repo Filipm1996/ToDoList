@@ -14,4 +14,5 @@ interface DeafultRepository {
 
     fun isCheckedChangeInFirebase(done: String, description: String)
 
+    fun deleteAllActivities(list:MutableList<Activity>)
 }

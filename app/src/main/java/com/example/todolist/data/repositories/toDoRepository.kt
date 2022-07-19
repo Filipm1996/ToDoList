@@ -88,4 +88,12 @@ class ToDoRepository: DeafultRepository {
         }
     }
 
+    override fun deleteAllActivities(list: MutableList<Activity>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            list.forEach {
+                deleteActivityFromFirebase(it.description)
+            }
+        }
+    }
+
 }

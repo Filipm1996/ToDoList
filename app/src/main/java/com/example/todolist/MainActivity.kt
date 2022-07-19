@@ -27,7 +27,7 @@ private lateinit var binding: ActivityMainBinding
 class MainActivity: AppCompatActivity() {
     private lateinit var viewModel : ToDoViewModel
     private  var recyclerAdapter : RecyclerAdapter? = null
-
+    private val listOfActivities = mutableListOf<Activity>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -37,10 +37,11 @@ class MainActivity: AppCompatActivity() {
         viewModel = ViewModelProvider(this,ToDoViewModelFactory(ToDoRepository()) )[ToDoViewModel::class.java]
         setOnClickListeners()
             val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-            viewModel.getAllActivitiesFromFirebase()
+
             viewModel.getAllActivitiesFromFirebase().observe(this){list ->
                 recyclerView.layoutManager = LinearLayoutManager(applicationContext)
                 recyclerAdapter?.addItem(list)
+                list.forEach{listOfActivities.add(it)}
                 recyclerView.adapter = recyclerAdapter
             }
 
@@ -62,6 +63,10 @@ class MainActivity: AppCompatActivity() {
         }
         recyclerAdapter!!.setOnIsCheckedItem {
                 isCheckedChange(it.done, it.description)
+        }
+        binding.deleteAll.setOnClickListener {
+            deleteAll()
+            recyclerAdapter!!.notifyDataSetChanged()
         }
 
     }
@@ -88,5 +93,20 @@ class MainActivity: AppCompatActivity() {
            }
             val alert = buildier.create()
             alert.show()
+    }
+
+    fun deleteAll(){
+        val buildier = AlertDialog.Builder(this)
+        buildier.setMessage("Do you want to delete all activities?")
+        buildier.setCancelable(true)
+        buildier.setPositiveButton("Yes") { dialog, _ ->
+            viewModel.deleteAllActivities(listOfActivities)
+            dialog.dismiss()
+        }
+        buildier.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val alert = buildier.create()
+        alert.show()
     }
 }

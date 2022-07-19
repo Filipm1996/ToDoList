@@ -25,4 +25,5 @@ class ToDoViewModel(
 
     fun isCheckedChangeInFirebase(done: String, description: String) = repository.isCheckedChangeInFirebase(done,description)
 
+    fun deleteAllActivities(list: MutableList<Activity>) = repository.deleteAllActivities(list)
 }
